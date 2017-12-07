@@ -6,11 +6,11 @@ SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
 os=$(uname -s)
-platform=""
+platform="linux"
 
 case "$os" in
   Linux*)   platform="linux" ;;
-  Darwin*)  platform="mac" ;; 
+  Darwin*)  platform="linux" ;; 
   *)        exit ;;
 esac
 
@@ -33,7 +33,7 @@ cd "$SCRIPTPATH/v8"
 
 if [[ "$platform" == *"linux"* ]]
 then
-CFLAGS="-fPIC" CXXFLAGS="-fPIC" make native -j $(grep -c ^processor /proc/cpuinfo) GYPFLAGS=-Dclang=0
+CFLAGS="-fPIC" CXXFLAGS="-fPIC" make native -j $(grep -c ^processor /proc/cpuinfo) GYPFLAGS="-Dclang=0 -Dlinux_use_bundled_gold=0"
 
 cp "./out/native/obj.target/tools/gyp/libv8_base.a" "./../$platform$arch/"
 cp "./out/native/obj.target/tools/gyp/libv8_libbase.a" "./../$platform$arch/"
